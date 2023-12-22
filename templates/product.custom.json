@@ -1,0 +1,65 @@
+{
+  "sections": {
+    "main": {
+      "type": "custom-product",
+      "blocks": {
+        "088c023b-5f26-4d05-8bf5-3988898a2508": {
+          "type": "title",
+          "settings": {
+          }
+        },
+        "dbca0c80-e3ae-4e79-9111-4f3064dc3491": {
+          "type": "price",
+          "settings": {
+          }
+        },
+        "a02310ba-7625-441c-96d5-a9862d62f29f": {
+          "type": "variant_picker",
+          "settings": {
+          }
+        },
+        "b13b2438-e2d0-4872-9eb8-02ee4a6496a4": {
+          "type": "quantity_selector",
+          "settings": {
+          }
+        },
+        "6b810840-f032-4cd2-866d-9576fbc44402": {
+          "type": "buy_buttons",
+          "settings": {
+          }
+        },
+        "b65d724d-bddb-45f1-aead-61aba54ba720": {
+          "type": "metafeild",
+          "settings": {
+          }
+        }
+      },
+      "block_order": [
+        "088c023b-5f26-4d05-8bf5-3988898a2508",
+        "dbca0c80-e3ae-4e79-9111-4f3064dc3491",
+        "a02310ba-7625-441c-96d5-a9862d62f29f",
+        "b13b2438-e2d0-4872-9eb8-02ee4a6496a4",
+        "6b810840-f032-4cd2-866d-9576fbc44402",
+        "b65d724d-bddb-45f1-aead-61aba54ba720"
+      ],
+      "settings": {
+        "enable_sticky_info": true,
+        "color_scheme": "",
+        "media_size": "large",
+        "constrain_to_viewport": true,
+        "media_fit": "contain",
+        "gallery_layout": "stacked",
+        "media_position": "left",
+        "image_zoom": "lightbox",
+        "mobile_thumbnails": "hide",
+        "hide_variants": false,
+        "enable_video_looping": false,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}
