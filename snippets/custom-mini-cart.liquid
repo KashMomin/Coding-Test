@@ -1,0 +1,160 @@
+    {% comment %} Cart Drawer Html And the JS code {% endcomment %}
+    
+    <div class="loader-container" id="loader-container">
+        <div class="loader"></div>
+    </div>
+
+    <div class="minicart_overlay" id="minicart_overlay" onclick="toggleMiniCart()"></div>
+
+    <div class="mini-cart" id="mini-cart">
+        <div class="closeMinicart" onclick="toggleMiniCart()">Close</div>
+
+        <div class="mini-cart-dropdown" id="mini-cart-dropdown">
+            <div id="lineitems"></div>
+            <div id="total-buttons"></div>
+        </div>
+    </div>
+  
+    
+<script>
+// Currency Format
+function formatCurrency(amount) {
+    return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'INR'
+    }).format(amount / 100);
+}
+
+// MiniCart Update
+function updateMiniCart() {
+    fetch('/cart.js')
+        .then(response => response.json())
+        .then(data => {
+            const miniCartDropdown = document.getElementById('lineitems');
+            const totalButtons = document.getElementById('total-buttons');
+            const cartCount = document.getElementById('cart-count');
+
+            // Clear existing content
+            miniCartDropdown.innerHTML = '';
+            totalButtons.innerHTML = '';
+
+            if (data.item_count > 0) {
+                for (let i = 0; i < data.items.length; i++) {
+                    const item = data.items[i];
+                    // Fetching product data
+                    fetch(`/products/${item.handle}.js`)
+                        .then(response => response.json())
+                        .then(productData => {
+                            const itemElement = document.createElement('div');
+                            itemElement.classList.add('mini-cart-item');
+                            itemElement.innerHTML = `
+                <div class="item-image">
+                    <a href="/products/${item.handle}"> <img src="${productData.featured_image}" alt="${item.title}" width="84"></a>
+                </div>
+                <div class="item-details">
+                    <span class="item-title"><a href="/products/${item.handle}">${item.title}</a></span>
+                    <div class="pricecontent">
+                    <div class="item-price">${formatCurrency(item.price)}</div>
+                    <div class="quantity-controls">
+                        <button class="decrease-quantity" onclick="updateCartItemQuantity('${i + 1}', ${item.quantity - 1})">-</button>
+                        <span class="item-quantity">${item.quantity}</span>
+                        <button class="increase-quantity" onclick="updateCartItemQuantity('${i + 1}', ${item.quantity + 1})">+</button>
+                    </div>
+                    </div>
+                </div>
+                <div class="item-actions">
+                    <button class="remove-item" onclick="removeCartItem('${i + 1}')">X</button>
+                </div>
+                `;
+                            //lin item
+                            miniCartDropdown.appendChild(itemElement);
+                            // animation
+                            void itemElement.offsetWidth;
+                            itemElement.style.opacity = '1';
+                        })
+                        .catch(error => {
+                            console.error('Error fetching product:', error);
+                        });
+                }
+
+                const totalElement = document.createElement('div');
+                totalElement.classList.add('mini-cart-total');
+                totalElement.innerHTML = `
+            <span>Total:</span>
+            <span>${formatCurrency(data.total_price)}</span>
+        `;
+                totalButtons.appendChild(totalElement);
+                // Mini Cart Buttons Update
+                const cartLink = document.createElement('a');
+                cartLink.href = '/cart';
+                cartLink.classList.add('mini-cart-checkout');
+                cartLink.textContent = 'View Cart';
+                totalButtons.appendChild(cartLink);
+                const checkoutLink = document.createElement('a');
+                checkoutLink.href = '/checkout';
+                checkoutLink.classList.add('checkout-button');
+                checkoutLink.textContent = 'Checkout';
+                totalButtons.appendChild(checkoutLink);
+            } else {
+                const emptyCartMessage = document.createElement('p');
+                emptyCartMessage.textContent = 'Your cart is empty.';
+                miniCartDropdown.appendChild(emptyCartMessage);
+            }
+
+            // Cart Caount to update on headr
+            cartCount.textContent = data.item_count;
+            loaderContainer.classList.remove('active');
+        })
+        .catch(error => {
+            console.error('Error fetching cart:', error);
+        });
+}
+var loaderContainer = document.getElementById('loader-container');
+// Function to remove a cart item
+function removeCartItem(variantId) {
+    loaderContainer.classList.add('active');
+    fetch(`/cart/change.js?line=${variantId}&quantity=0`, {
+            method: 'POST'
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Handle the response as needed
+            console.log(data);
+            // Update the mini cart
+            updateMiniCart();
+        })
+        .catch(error => {
+            console.error('Error removing item from cart:', error);
+        });
+}
+
+// Function to update cart item quantity
+function updateCartItemQuantity(lineItemId, newQuantity) {
+    loaderContainer.classList.add('active');
+    fetch(`/cart/change.js?line=${lineItemId}&quantity=${newQuantity}`, {
+            method: 'POST'
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Handle the response as needed
+            console.log(data);
+            // Update the mini cart
+            updateMiniCart();
+        })
+        .catch(error => {
+            console.error('Error updating item quantity:', error);
+        });
+}
+
+// Initial update when the page loads
+updateMiniCart();
+
+function toggleMiniCart() {
+    event.preventDefault();
+    var miniCart = document.getElementById('mini-cart');
+    var minicart_overlay = document.getElementById('minicart_overlay');
+    miniCart.classList.toggle('active');
+    minicart_overlay.classList.toggle('active');
+} 
+
+</script>

@@ -1,0 +1,10 @@
+{% comment %} Add to cart Form {% endcomment %}
+<div class="loader-container" id='loader-container' >
+  <div class="loader" ></div>
+</div>
+<form action="/cart/add" method="post" enctype="multipart/form-data" class="product-form" id="product-formss">
+    <input type="hidden" name="form_type" value="product">
+    <input type="hidden" name="utf8" value="✓">
+    <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" class="custom-variant-id">
+    <input type="submit" name="add" value="Add to Cart" class="btn" id="add-to-cart-btn">
+  </form>

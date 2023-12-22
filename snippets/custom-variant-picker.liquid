@@ -1,0 +1,20 @@
+{% comment %} Custom Variant Picker Liquid code  {% endcomment %}
+{% if product.variants.size > 1 %}
+    {% for option in product.options_with_values %}
+      <fieldset>
+        <legend>{{ option.name }}</legend>
+        {% for value in option.values %}
+          <label {% if option.name contains 'Color' %} class='color_swatches radio-cust' {% else %} class='radiobuttons radio-cust' {% endif %}>
+            <input type="radio" name="options[{{ option.name }}]" value="{{ value }}" {% if forloop.index == 1 %}checked{% endif %} class="swatches_input">
+            <span 
+            {% if option.name contains 'Color' %}  
+                style="background:{{ value | handleize }}" 
+            {% endif %} >
+            {{ value }}</span>
+          </label>
+        {% endfor %}
+      </fieldset>
+    {% endfor %}
+  {% endif %}
+  
+ 
